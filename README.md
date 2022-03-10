@@ -44,13 +44,29 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 ## Deploying to Akash Network
 
 1. Install the [Akash Command Line Tool](https://docs.akash.network/guides/cli/part-1.-install-akash) so you can use `akash` on the command line.
-1. Configure the environment variables to setup your account for deployment.
-2. [Create a new certificate](https://docs.akash.network/guides/cli/part-6.-create-your-certificate) using the Akash CLI
-3. Build your container image using Docker: `docker build -t <yourusername>/nextjs-akash .`. 
-4. Push your container image to a PUBLIC repository. This will enable Akash deployments to utilize your image. Currently only public images are supported which may be fine if you are making a public service anyways. Ensure you follow best practices for container security.
-5. Create a deployment file which will describe the units you will need as well as the image you will use. You can find a quickstart example in `deploy.yaml` with an already public image if your just testing.
-6. Begin a deployment to Akash. Follow the Akash guide from [part 7-10](https://docs.akash.network/guides/cli/part-7.-create-your-deployment)
-7. View your newly deployed NextJS app! The URI will be included in the response of `akash provider lease-status` command noted in [step 10](https://docs.akash.network/guides/cli/part-10.-send-the-manifest) of the Akash guide
+2. Configure the environment variables to setup your account for deployment.
+3. [Create a new certificate](https://docs.akash.network/guides/cli/part-6.-create-your-certificate) using the Akash CLI: 
+
+```
+akash tx cert create client --chain-id $AKASH_CHAIN_ID --keyring-backend $AKASH_KEYRING_BACKEND --from $AKASH_KEY_NAME --node $AKASH_NODE --gas-prices="0.025uakt" --gas="auto" --gas-adjustment=1.15
+```
+
+4. Build your container image using Docker:  
+   `docker build -t <yourusername>/nextjs-akash .`. 
+5. Push your container image to a PUBLIC repository:  
+    `docker push <yourusername>/nextjs-akash`. This will enable Akash deployments to utilize your image. Currently only public images are supported which may be fine if you are making a public service anyways. Ensure you follow best practices for container security.
+6. Create a deployment file which will describe the units you will need as well as the image you will use. You can find a quickstart example in `deploy.yaml` with an already public image if you are just testing. For example if you want to deploy the `lunie-light` image you can use this example deployment file from the [Akash docs](https://docs.akash.network/guides/cli/part-5.-create-your-configuration) :
+
+```
+curl -s https://raw.githubusercontent.com/ovrclk/docs/master/guides/deploy/deploy.yml > deploy.yaml
+```
+
+7. Begin a deployment to Akash. Follow the Akash guide from [part 7-10](https://docs.akash.network/guides/cli/part-7.-create-your-deployment). 
+Example command
+```
+akash tx deployment create deploy.yml --from $AKASH_KEY_NAME --node $AKASH_NODE --chain-id $AKASH_CHAIN_ID --gas-prices="0.025uakt" --gas="auto" --gas-adjustment=1.15
+```
+8. View your newly deployed NextJS app! The URI will be included in the response of `akash provider lease-status` command noted in [step 10](https://docs.akash.network/guides/cli/part-10.-send-the-manifest) of the Akash guide
 
 ### Setting up a custom domain with SSL
 
@@ -62,15 +78,15 @@ After you have your domain you need to create a cloudflare account and add your 
 
 Next, head to your newly added domain and add a new CNAME DNS record for the Akash uri :
 
-![](/screenshots/cloudflare1.png)
+![](nextjs-akash-boilerplate/screenshots/cloudflare1.png)
 
 While in the management panel, scroll down and ensure your SSL and TLS are set to 'FULL'
 
-![](/screenshots/cloudflare2.png)
+![](nextjs-akash-boilerplate/screenshots/cloudflare2.png)
 
 Under the SSL/TLS Tab, navigate to Edge Certificates. Make sure ‘always use HTTPS’ is enabled.
 
-![](/screenshots/cloudflare3.png)
+![](nextjs-akash-boilerplate/screenshots/cloudflare3.png)
 
 You can now visit your custom domain. When you do so it will redirect to your Akash deployment uri but this time with HTTPS available and with a proper SSL cert. 
 
