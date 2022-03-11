@@ -43,6 +43,8 @@ The `pages/api` directory is mapped to `/api/*`. Files in this directory are tre
 
 ## Deploying to Akash Network
 
+### Using the Akash CLI 
+
 1. Install the [Akash Command Line Tool](https://docs.akash.network/guides/cli/part-1.-install-akash) so you can use `akash` on the command line.
 2. Configure the environment variables to setup your account for deployment.
 3. [Create a new certificate](https://docs.akash.network/guides/cli/part-6.-create-your-certificate) using the Akash CLI: 
@@ -67,6 +69,45 @@ Example command
 akash tx deployment create deploy.yml --from $AKASH_KEY_NAME --node $AKASH_NODE --chain-id $AKASH_CHAIN_ID --gas-prices="0.025uakt" --gas="auto" --gas-adjustment=1.15
 ```
 8. View your newly deployed NextJS app! The URI will be included in the response of `akash provider lease-status` command noted in [step 10](https://docs.akash.network/guides/cli/part-10.-send-the-manifest) of the Akash guide
+
+
+### Using the Akashlytics Deploy App
+
+The Akashlytics Deploy App provides a more graphical way to get your deployment into the Akash network. Rather than using the CLI, the Akashlytics Deploy App enables you to do all the actions you need to deploy a resource. This method may be more suitable to those who prefer to stay away from the command line. 
+
+To get started, download Akashlytics Deploy App from Akash website, install it and input a mnemonic to be used for deployments. This can be a fresh mnemonic as long as you send the 5 or so AKT needed to get the deployments done. 
+
+Assuming you have installed the app, setup a wallet and funded it; head to either the deployments tab or the templates tab. 
+
+> Templates provide a number of community submitted deployments for various services to save you time in trying to figure out how to deploy basic things such as wordpress. This repo has been submitted to eventually be added to this templates list and you can find the [full list of templates here](https://github.com/ovrclk/awesome-akash)
+
+Sticking with the deployments option, lets create a new deployment. In order to do so you will need a valid certificate both locally and on chain. Lets assume you don't have this. You can generate or regenerate a certificate with the App by clicking the options next to the Certificate badge and selecting either generate or regenerate.
+
+![](nextjs-akash-boilerplate/screenshots/regen-cert.png)
+
+Remember you will need to have at least 5 AKT in the wallet you have signed in to the app in order to create a deployment 
+
+![](nextjs-akash-boilerplate/screenshots/Create%20a%20new%20deployment.png)
+
+We can now select either to deploy from a template, a git resource or in our case we will just use the file included with this repo. Provide this file via the local option or git and you should see something similar to the this:
+
+![](nextjs-akash-boilerplate/screenshots/Create-a-new-deployment.png)
+
+Next, after providing your deployment file you should begin to see bids coming in. If for some reason you don't see any bids ever coming in, this suggests theres a problem with your deployment file. In my case I was missing a `signedOff` key in the deployment template.
+
+![](nextjs-akash-boilerplate/screenshots/no-bids.png)
+
+In most cases you will start to see bids coming in from various providers as well as the rate they can offer you. Select one of these providers and submit a transaction to create a lease: 
+
+![](nextjs-akash-boilerplate/screenshots/some-bids.png)
+
+![](nextjs-akash-boilerplate/screenshots/lease-maker.png)
+
+Assuming no issues with the lease transaction, after some time you should now see a success message as well as the final deployment details for your deployment including its ongoing costs 
+
+![](nextjs-akash-boilerplate/screenshots/deployment-live.png)
+
+
 
 ### Setting up a custom domain with SSL
 
