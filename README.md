@@ -108,8 +108,7 @@ Assuming no issues with the lease transaction, after some time you should now se
 ![](nextjs-akash-boilerplate/screenshots/deployment-live.png)
 
 
-
-### Setting up a custom domain with SSL
+### Setting up a custom domain with SSL
 
 After doing your first successful deploy, take a moment. You have already achieved so much by getting NextJs into the Akash network. Two problems remains which are 1. Your uri is not the best to share and market around and 2. HTTPS with secured connections aren't right but we can fix both of these by getting a custom domain and putting cloudflare in front of it. 
 
